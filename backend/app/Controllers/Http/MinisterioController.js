@@ -14,9 +14,9 @@ class MinisterioController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
-    const posts = await Posts.all()
-    return posts
+  async index () {
+    const ministerio = await Ministerio.all()
+    return ministerio
   }
 
 
@@ -28,7 +28,11 @@ class MinisterioController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request }) {
+    const data = request.only(['min_nome', 'min_descricao'])
+    const ministerio = await Ministerio.create(data)
+
+    return ministerio
   }
 
   /**
@@ -37,10 +41,13 @@ class MinisterioController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
+   * @param {Response} ct
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params, request, view }) {
+    const ministerio = await Ministerio.find(parms.id)
+
+    return ministerio
   }
 
 
@@ -50,9 +57,17 @@ class MinisterioController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
+   * @param {Response} ct
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request }) {
+    const data = request.only(['min_nome','min_descricao'])
+    const ministerio = await Ministerio.find(params.id)
+
+    ministerio.merge(data)
+    await ministerio.save()
+
+    return ministerio
+
   }
 
   /**
@@ -61,9 +76,12 @@ class MinisterioController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
+   * @param {Response} ct
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, request }) {
+    const ministerio = await Ministerio.find(params.id)
+
+    await ministerio.delete()
   }
 }
 
